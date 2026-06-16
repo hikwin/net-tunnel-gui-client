@@ -977,7 +977,19 @@ class TunnelApp:
             pass
         self.log(self.get_text("log_detect_ip"))
         
-        def worker():
+        active_fetches = 2
+        
+        def check_finished():
+            nonlocal active_fetches
+            active_fetches -= 1
+            if active_fetches == 0:
+                try:
+                    if self.root and self.root.winfo_exists():
+                        self.btn_ip_refresh.config(state="normal", text=self.get_text("btn_refresh"))
+                except Exception:
+                    pass
+
+        def ipv4_worker():
             ipv4 = ip_service.fetch_public_ip()
             self.local_public_ipv4 = ipv4
             ipv4_show = ipv4 if ipv4 else self.get_text("get_ip_failed_offline")
@@ -987,7 +999,9 @@ class TunnelApp:
                 self.log(self.get_text("log_found_ipv4", ip=ipv4))
             else:
                 self.log(self.get_text("log_failed_ipv4"))
-                
+            self.root.after(0, check_finished)
+
+        def ipv6_worker():
             ipv6 = ip_service.fetch_public_ipv6()
             self.local_public_ipv6 = ipv6
             ipv6_show = ipv6 if ipv6 else self.get_text("get_ip_not_assigned")
@@ -997,16 +1011,10 @@ class TunnelApp:
                 self.log(self.get_text("log_found_ipv6", ip=ipv6))
             else:
                 self.log(self.get_text("log_failed_ipv6"))
-                
-            def finish():
-                try:
-                    if self.root and self.root.winfo_exists():
-                        self.btn_ip_refresh.config(state="normal", text=self.get_text("btn_refresh"))
-                except Exception:
-                    pass
-            self.root.after(0, finish)
+            self.root.after(0, check_finished)
             
-        threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(target=ipv4_worker, daemon=True).start()
+        threading.Thread(target=ipv6_worker, daemon=True).start()
 
     def show_ip_details(self):
         """Pop up a new Toplevel window to show the full IPGetApp UI."""

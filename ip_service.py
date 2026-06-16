@@ -3,6 +3,7 @@ import json
 import socket
 import os
 import re
+import concurrent.futures
 
 def http_get(url, timeout=5):
     """
@@ -50,28 +51,50 @@ def get_local_ip():
         except Exception:
             return "127.0.0.1"
 
+def fetch_single_ip(url, key, timeout=4):
+    """Fetch IP from a single provider."""
+    try:
+        res_text = http_get(url, timeout=timeout)
+        if not res_text:
+            return None
+        res_text = res_text.strip()
+        if key:
+            data = json.loads(res_text)
+            ip = data.get(key)
+        else:
+            ip = res_text
+        if ip:
+            if "," in ip:
+                ip = ip.split(",")[0].strip()
+            ip = ip.strip()
+            if "." in ip or ":" in ip:
+                return ip
+    except Exception:
+        pass
+    return None
+
 def fetch_public_ip():
     """
-    Fetch the public IP address of this machine from multiple providers.
+    Fetch the public IP address of this machine from multiple providers in parallel.
     """
     providers = [
         ("https://api.ipify.org?format=json", "ip"),
         ("https://httpbin.org/ip", "origin"),
         ("http://ip-api.com/json/", "query"),
-        ("http://whois.pconline.com.cn/ipJson.jsp?json=true", "ip")
+        ("http://ipinfo.io/ip", None)
     ]
-    for url, key in providers:
-        try:
-            res_text = http_get(url, timeout=4)
-            data = json.loads(res_text)
-            ip = data.get(key)
-            if ip:
-                # If httpbin returns multiple IPs, grab the first one
-                if "," in ip:
-                    ip = ip.split(",")[0].strip()
-                return ip.strip()
-        except Exception as e:
-            print(f"Failed to fetch public IP from {url}: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(providers)) as executor:
+        futures = {
+            executor.submit(fetch_single_ip, url, key, 4): url
+            for url, key in providers
+        }
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                ip = future.result()
+                if ip:
+                    return ip
+            except Exception:
+                pass
     return None
 
 def query_network_location(ip):
@@ -104,22 +127,23 @@ def query_network_location(ip):
             if isp:
                 loc_str += f" ({isp})"
             results["ip-api"] = loc_str
-    except Exception as e:
-        print(f"ip-api.com query failed for {ip}: {e}")
+    except Exception:
+        pass
 
-    # 2. Try whois.pconline.com.cn (excellent for Chinese domestic IP detail)
+    # 2. Try Baidu OpenData IP API (excellent for Chinese domestic IP detail, replacement for whois.pconline.com.cn)
     try:
-        url = f"http://whois.pconline.com.cn/ipJson.jsp?ip={ip}&json=true"
+        url = f"http://opendata.baidu.com/api.php?query={ip}&co=&resource_id=6006&oe=utf-8"
         res_text = http_get(url, timeout=4)
         data = json.loads(res_text)
-        addr = data.get("addr")
-        if addr:
-            results["pconline"] = addr.strip()
-    except Exception as e:
-        print(f"whois.pconline.com.cn query failed for {ip}: {e}")
+        if data.get("status") == "0" and data.get("data"):
+            location = data["data"][0].get("location")
+            if location:
+                results["pconline"] = location.strip()
+    except Exception:
+        pass
 
     # Decision logic:
-    # If domestic Chinese IP, pconline is generally more precise down to district/operator.
+    # If domestic Chinese IP, pconline (now Baidu) is generally more precise down to district/operator.
     # If international, pconline can be inaccurate (often saying e.g. "美国 广东省广州市"),
     # so we prioritize ip-api for international IPs.
     ip_api_res = results.get("ip-api", "")
@@ -260,23 +284,25 @@ def get_local_ipv6():
             return None
 
 def fetch_public_ipv6():
-    """Fetch the public IPv6 address of this machine from multiple providers."""
+    """Fetch the public IPv6 address of this machine from multiple providers in parallel."""
     providers = [
-        ("https://api6.ipify.org?format=json", "ip"),
-        ("https://v6.ident.me", None)
+        ("https://speed.neu6.edu.cn/getIP.php", None),
+        ("https://ipv6.lookup.test-ipv6.com/ip/", "ip"),
+        ("https://v6.ident.me", None),
+        ("https://api6.ipify.org?format=json", "ip")
     ]
-    for url, key in providers:
-        try:
-            res_text = http_get(url, timeout=4)
-            if key:
-                data = json.loads(res_text)
-                ip = data.get(key)
-            else:
-                ip = res_text.strip()
-            if ip:
-                return ip.strip()
-        except Exception as e:
-            print(f"Failed to fetch public IPv6 from {url}: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(providers)) as executor:
+        futures = {
+            executor.submit(fetch_single_ip, url, key, 4): url
+            for url, key in providers
+        }
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                ip = future.result()
+                if ip:
+                    return ip
+            except Exception:
+                pass
     return None
 
 def check_port_listening(port):

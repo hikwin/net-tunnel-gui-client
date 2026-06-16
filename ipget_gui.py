@@ -240,6 +240,9 @@ class IPGetApp:
             "input_bg": "#181825"
         }
 
+        # Set root background to match theme
+        self.root.configure(bg=self.colors["bg"])
+
         # Initialize UI Styles
         self.setup_styles()
         
@@ -894,8 +897,20 @@ class IPGetApp:
         except Exception:
             pass
         self.log(self.get_text("log_detect_ip"))
+        
+        active_fetches = 2
+        
+        def check_finished():
+            nonlocal active_fetches
+            active_fetches -= 1
+            if active_fetches == 0:
+                try:
+                    if self.root and self.root.winfo_exists():
+                        self.btn_refresh.config(state="normal", text=self.get_text("btn_refresh"))
+                except Exception:
+                    pass
 
-        def worker():
+        def ipv4_worker():
             # IPv4
             local_ip = ip_service.get_local_ip()
             self.local_ip = local_ip
@@ -919,7 +934,9 @@ class IPGetApp:
             else:
                 self.root.after(0, lambda: self.set_entry_text(self.val_public_ip, "Failed (Offline)" if self.current_lang == 'en' else "获取失败 (离线)", self.colors["danger"]))
                 self.log(self.get_text("log_pub_ipv4_err"))
+            self.root.after(0, check_finished)
 
+        def ipv6_worker():
             # IPv6
             local_ipv6 = ip_service.get_local_ipv6()
             self.local_ipv6 = local_ipv6
@@ -939,16 +956,10 @@ class IPGetApp:
                 self.log(self.get_text("log_pub_ipv6_ok", ip=public_ipv6))
             else:
                 self.log(self.get_text("log_pub_ipv6_err"))
-                
-            def finish():
-                try:
-                    if self.root and self.root.winfo_exists():
-                        self.btn_refresh.config(state="normal", text=self.get_text("btn_refresh"))
-                except Exception:
-                    pass
-            self.root.after(0, finish)
+            self.root.after(0, check_finished)
             
-        threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(target=ipv4_worker, daemon=True).start()
+        threading.Thread(target=ipv6_worker, daemon=True).start()
 
     def set_input_default_ip(self, ip):
         """Pre-populate the lookup search field with the public IP."""
