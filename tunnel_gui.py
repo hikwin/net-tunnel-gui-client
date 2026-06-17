@@ -114,7 +114,7 @@ class TunnelApp:
                 "log_found_ipv6": "检测到本机公网 IPv6: {ip}",
                 "log_failed_ipv6": "未检测到本机公网 IPv6 地址",
                 "log_checking_deps": "正在加载并检查环境依赖项...",
-                "log_dep_results": "系统环境检测: NPX (Localtunnel)={npx_ok}, OpenSSH (SSH)={ssh_ok}",
+                "log_dep_results": "系统环境检测: NPX (Localtunnel)={npx_ok}, OpenSSH (SSH)={ssh_ok}, Cloudflared={cf_ok}",
                 "log_ssh_key_gen": "检测到系统不存在 SSH 密钥，正在自动为您生成 Ed25519 密钥对以用于免密通道连接...",
                 "log_ssh_key_ed25519_ok": "SSH 密钥对 (Ed25519) 生成成功！",
                 "log_ssh_key_ed25519_err": "Ed25519 密钥生成失败: {stderr}，尝试生成 RSA 密钥对...",
@@ -134,9 +134,15 @@ class TunnelApp:
                 "log_config_saved": "配置已保存到: {path}",
                 "log_config_save_fail": "保存配置失败: {e}",
                 "log_config_load_fail": "加载配置文件失败: {e}",
+                "log_cf_downloading": "正在下载 Cloudflare Tunnel (cloudflared) 客户端...",
+                "log_cf_download_progress": "正在下载: {percent:.1f}% ({downloaded_mb:.2f}MB / {total_mb:.2f}MB)...",
+                "log_cf_download_success": "Cloudflare Tunnel (cloudflared) 客户端下载成功！",
+                "log_cf_download_failed": "Cloudflare Tunnel 客户端下载失败: {e}",
+                "cf_info": "Cloudflare Tunnel 快速分享模式无需账号或配置。\n首次使用时，程序会自动检测并下载 cloudflared 客户端。",
                 "tip_lt": "• Localtunnel 是一个基于 Node.js 的免费反向代理穿透客户端。\n• 子域名为选填项，如果不填，系统会默认生成一个随机域名。\n• Host 参数通常使用官网默认的 'https://localtunnel.me'。\n• 优点：不需要任何账户即可启动，速度和稳定性极佳。",
                 "tip_serveo": "• serveo.net 是一项极简的 SSH 远程端口映射服务。\n• 优点：使用纯 SSH 转发，不需要本地安装任何辅助二进制文件，直接复用操作系统的 OpenSSH 客户端。\n• 它的公共链接以 `.serveo.net` 或 `.serveousercontent.com` 结尾，对 HTTP/HTTPS 的代理非常适合测试 API 与前端网页。",
-                "tip_pinggy": "• Pinggy.io 是一项高性能且防火墙友好的 SSH 穿透服务。\n• 优点：同样使用纯 SSH 转发，直连远程服务器的 443 端口，对大多数严格的企业内网也有极强的穿透力。\n• 它的免费公网链接以 `.pinggy.link` 结尾，不需要任何客户端安装，适合开发测试与 webhook 回调。"
+                "tip_pinggy": "• Pinggy.io 是一项高性能且防火墙友好的 SSH 穿透服务。\n• 优点：同样使用纯 SSH 转发，直连远程服务器的 443 端口，对大多数严格的企业内网也有极强的穿透力。\n• 它的免费公网链接以 `.pinggy.link` 结尾，不需要任何客户端安装，适合开发测试与 webhook 回调。",
+                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) 是一种极简的内网穿透服务。\n• 优点：完全免费，无需注册/登录 Cloudflare 账号，自动生成随机的三级域名 `*.trycloudflare.com`。\n• 首次运行如果本地未检测到 `cloudflared`，系统将自动从 GitHub/镜像源下载该客户端二进制文件。"
             },
             "en": {
                 "window_title": "Intranet Penetration GUI Client",
@@ -199,7 +205,7 @@ class TunnelApp:
                 "log_found_ipv6": "Detected public IPv6: {ip}",
                 "log_failed_ipv6": "No public IPv6 address detected",
                 "log_checking_deps": "Checking environment dependencies...",
-                "log_dep_results": "Environment check: NPX (Localtunnel)={npx_ok}, OpenSSH (SSH)={ssh_ok}",
+                "log_dep_results": "Environment check: NPX (Localtunnel)={npx_ok}, OpenSSH (SSH)={ssh_ok}, Cloudflared={cf_ok}",
                 "log_ssh_key_gen": "No SSH keys found. Generating Ed25519 key pair for passwordless connection...",
                 "log_ssh_key_ed25519_ok": "SSH key pair (Ed25519) generated successfully!",
                 "log_ssh_key_ed25519_err": "Ed25519 key generation failed: {stderr}. Trying RSA...",
@@ -219,9 +225,15 @@ class TunnelApp:
                 "log_config_saved": "Config saved to: {path}",
                 "log_config_save_fail": "Failed to save config: {e}",
                 "log_config_load_fail": "Failed to load config: {e}",
+                "log_cf_downloading": "Downloading Cloudflare Tunnel (cloudflared) client...",
+                "log_cf_download_progress": "Downloading: {percent:.1f}% ({downloaded_mb:.2f}MB / {total_mb:.2f}MB)...",
+                "log_cf_download_success": "Cloudflare Tunnel (cloudflared) client downloaded successfully!",
+                "log_cf_download_failed": "Failed to download Cloudflare Tunnel client: {e}",
+                "cf_info": "Cloudflare Tunnel Quick Share requires no account or config.\nClient binary (cloudflared) will be auto-downloaded on first run.",
                 "tip_lt": "• Localtunnel is a free, Node.js-based reverse proxy client.\n• Subdomain is optional. If left blank, a random domain will be generated.\n• Host defaults to 'https://localtunnel.me'.\n• Advantage: No account needed, speed and stability are excellent.",
                 "tip_serveo": "• serveo.net is an ultra-simple SSH port forwarding service.\n• Advantage: Uses pure SSH. No local agent binary is needed as it uses openSSH.\n• Public URLs end with `.serveo.net` or `.serveousercontent.com`, perfect for APIs and web page testing.",
-                "tip_pinggy": "• Pinggy.io is a high-performance, firewall-friendly SSH tunnel service.\n• Advantage: Uses pure SSH to port 443, making it highly effective even behind strict corporate firewalls.\n• Free URLs end with `.pinggy.link`. No installation is required, ideal for webhooks."
+                "tip_pinggy": "• Pinggy.io is a high-performance, firewall-friendly SSH tunnel service.\n• Advantage: Uses pure SSH to port 443, making it highly effective even behind strict corporate firewalls.\n• Free URLs end with `.pinggy.link`. No installation is required, ideal for webhooks.",
+                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) is an ultra-simple tunnel service.\n• Advantage: Completely free, no registration or Cloudflare account required. Generates a random `*.trycloudflare.com` URL.\n• If `cloudflared` is not found locally on first launch, the system will automatically download it from GitHub/mirrors."
             }
         }
         
@@ -258,6 +270,104 @@ class TunnelApp:
             exe_dir = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(exe_dir, "config.json")
 
+    def get_cloudflared_path(self):
+        """Locate cloudflared binary next to executable or source file."""
+        if getattr(sys, 'frozen', False):
+            exe_dir = os.path.dirname(sys.executable)
+        else:
+            exe_dir = os.path.dirname(os.path.abspath(__file__))
+        binary_name = "cloudflared.exe" if os.name == 'nt' else "cloudflared"
+        return os.path.join(exe_dir, binary_name)
+
+    def download_cloudflared(self, target_path):
+        """Asynchronously download the cloudflared binary matching current platform and architecture."""
+        import platform
+        import urllib.request
+        
+        system = platform.system().lower()
+        machine = platform.machine().lower()
+        
+        filename = "cloudflared"
+        if system == "windows":
+            filename = "cloudflared-windows-amd64.exe" if "64" in machine else "cloudflared-windows-386.exe"
+        elif system == "darwin":
+            filename = "cloudflared-darwin-arm64" if "arm" in machine else "cloudflared-darwin-amd64"
+        elif system == "linux":
+            if "arm" in machine or "aarch64" in machine:
+                filename = "cloudflared-linux-arm64" if "64" in machine else "cloudflared-linux-arm"
+            else:
+                filename = "cloudflared-linux-amd64" if "64" in machine else "cloudflared-linux-386"
+                
+        urls = [
+            f"https://mirror.ghproxy.com/https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}",
+            f"https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}"
+        ]
+        
+        self.log(self.get_text("log_cf_downloading"))
+        
+        last_err = None
+        for url in urls:
+            try:
+                req = urllib.request.Request(
+                    url,
+                    headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+                )
+                with urllib.request.urlopen(req, timeout=15) as response:
+                    total_size = int(response.headers.get('content-length', 0))
+                    temp_path = target_path + ".tmp"
+                    downloaded = 0
+                    block_size = 1024 * 64 # 64KB chunks
+                    
+                    # Create parent directories if they don't exist
+                    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                    
+                    last_percent = -1
+                    with open(temp_path, 'wb') as f:
+                        while True:
+                            if not self.is_running: # User stopped the tunnel mid-download
+                                f.close()
+                                if os.path.exists(temp_path):
+                                    os.remove(temp_path)
+                                return False
+                                
+                            chunk = response.read(block_size)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                            downloaded += len(chunk)
+                            
+                            if total_size > 0:
+                                percent = (downloaded / total_size) * 100
+                                # Log progress every 5% increase to avoid flooding console
+                                if int(percent / 5) > last_percent:
+                                    last_percent = int(percent / 5)
+                                    downloaded_mb = downloaded / (1024 * 1024)
+                                    total_mb = total_size / (1024 * 1024)
+                                    self.log(self.get_text("log_cf_download_progress", 
+                                                           percent=percent, 
+                                                           downloaded_mb=downloaded_mb, 
+                                                           total_mb=total_mb))
+                                    
+                    if os.path.exists(target_path):
+                        os.remove(target_path)
+                    os.rename(temp_path, target_path)
+                    
+                    # Apply executable permission if not Windows
+                    if system != "windows":
+                        os.chmod(target_path, 0o755)
+                        
+                    self.log(self.get_text("log_cf_download_success"))
+                    return True
+            except Exception as e:
+                last_err = e
+                # Fallback to next URL
+                continue
+                
+        if last_err:
+            self.log(self.get_text("log_cf_download_failed", e=str(last_err)))
+            raise last_err
+        return False
+
     def load_config(self):
         """Load settings from config.json."""
         config_path = self.get_config_path()
@@ -277,7 +387,7 @@ class TunnelApp:
                     self.port_input.insert(0, port)
                     
                     provider = config.get("provider", "Localtunnel (lt)")
-                    if provider in ["Localtunnel (lt)", "serveo.net (SSH)", "Pinggy.io (SSH)"]:
+                    if provider in ["Localtunnel (lt)", "serveo.net (SSH)", "Pinggy.io (SSH)", "Cloudflare Tunnel"]:
                         self.provider_select.set(provider)
                         
                     subdomain = config.get("subdomain", "")
@@ -347,7 +457,12 @@ class TunnelApp:
         self.config_frame.config(text=self.get_text("config_frame"))
         self.lbl_subdomain.config(text=self.get_text("lbl_subdomain"))
         self.lbl_host.config(text=self.get_text("lbl_host"))
-        self.info_label.config(text=self.get_text("ssh_info"))
+        
+        provider = self.provider_var.get()
+        if provider and "Cloudflare" in provider:
+            self.info_label.config(text=self.get_text("cf_info"))
+        else:
+            self.info_label.config(text=self.get_text("ssh_info"))
         
         if self.is_running:
             self.btn_action.config(text=self.get_text("btn_stop_tunnel"))
@@ -430,19 +545,34 @@ class TunnelApp:
         def worker():
             # Check npx
             try:
-                res = subprocess.run("npx -v", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                res = subprocess.run("npx -v", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
                 npx_ok = res.returncode == 0
             except Exception:
                 npx_ok = False
                 
             # Check SSH
             try:
-                res = subprocess.run("ssh -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                res = subprocess.run("ssh -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
                 ssh_ok = res.returncode == 0
             except Exception:
                 ssh_ok = False
 
-            self.log(self.get_text("log_dep_results", npx_ok=npx_ok, ssh_ok=ssh_ok))
+            # Check Cloudflared
+            local_cf = self.get_cloudflared_path()
+            cf_ok = False
+            if os.path.exists(local_cf):
+                cf_ok = True
+            else:
+                try:
+                    res = subprocess.run("cloudflared -v", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                         creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                    cf_ok = res.returncode == 0
+                except Exception:
+                    cf_ok = False
+
+            self.log(self.get_text("log_dep_results", npx_ok=npx_ok, ssh_ok=ssh_ok, cf_ok=cf_ok))
             
         threading.Thread(target=worker, daemon=True).start()
 
@@ -569,7 +699,7 @@ class TunnelApp:
         self.lbl_provider.pack(anchor=tk.W, pady=(0, 5))
         
         self.provider_select = ttk.Combobox(left_inner, textvariable=self.provider_var, 
-                                            values=["Localtunnel (lt)", "serveo.net (SSH)", "Pinggy.io (SSH)"],
+                                            values=["Localtunnel (lt)", "serveo.net (SSH)", "Pinggy.io (SSH)", "Cloudflare Tunnel"],
                                             state="readonly", font=("Segoe UI", 10))
         self.provider_select.pack(anchor=tk.W, fill=tk.X, pady=(0, 15))
         self.provider_select.current(0)
@@ -731,12 +861,20 @@ class TunnelApp:
         if "Localtunnel" in provider:
             self.lt_form.pack(fill=tk.X)
             self.lbl_tip_desc.config(text=self.get_text("tip_lt"))
-        else: # SSH tunnels (serveo.net, Pinggy.io)
+        else: # SSH tunnels or Cloudflare
             self.info_form.pack(fill=tk.X)
             if "serveo.net" in provider:
                 self.lbl_tip_desc.config(text=self.get_text("tip_serveo"))
-            else: # Pinggy.io
+            elif "Pinggy.io" in provider:
                 self.lbl_tip_desc.config(text=self.get_text("tip_pinggy"))
+            else: # Cloudflare Tunnel
+                self.lbl_tip_desc.config(text=self.get_text("tip_cf"))
+        
+        # Also update info_label text dynamically
+        if provider and "Cloudflare" in provider:
+            self.info_label.config(text=self.get_text("cf_info"))
+        else:
+            self.info_label.config(text=self.get_text("ssh_info"))
 
     def toggle_tunnel(self):
         """Start or Stop the tunnel process."""
@@ -808,6 +946,7 @@ class TunnelApp:
         cmd = ""
         url_regex = ""
 
+        cf_cmd = ""
         if "Localtunnel" in provider:
             sub = self.lt_subdomain.get().strip()
             host = self.lt_host.get().strip()
@@ -825,6 +964,32 @@ class TunnelApp:
         elif "Pinggy.io" in provider:
             cmd = f"ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:{port} free.pinggy.io"
             url_regex = r"(https://[a-zA-Z0-9\-\.]+\.pinggy(?:-free)?\.(?:link|net))"
+            
+        elif "Cloudflare" in provider:
+            local_cf = self.get_cloudflared_path()
+            if os.path.exists(local_cf):
+                cf_cmd = f'"{local_cf}"'
+            else:
+                in_path = False
+                try:
+                    res = subprocess.run(
+                        "cloudflared -v", 
+                        shell=True, 
+                        stdout=subprocess.PIPE, 
+                        stderr=subprocess.PIPE, 
+                        text=True,
+                        creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+                    )
+                    if res.returncode == 0:
+                        in_path = True
+                except Exception:
+                    pass
+                if in_path:
+                    cf_cmd = "cloudflared"
+                else:
+                    cf_cmd = f'"{local_cf}"'
+            cmd = f"{cf_cmd} tunnel --url http://127.0.0.1:{port}"
+            url_regex = r"(https://[a-zA-Z0-9-]+\.trycloudflare\.com)"
 
         self.log(self.get_text("log_starting_tunnel", provider=provider, port=port))
         self.log(self.get_text("log_exec_cmd", cmd=cmd))
@@ -871,6 +1036,12 @@ class TunnelApp:
             try:
                 if "SSH" in provider:
                     self.ensure_ssh_key()
+                elif "Cloudflare" in provider:
+                    local_cf = self.get_cloudflared_path()
+                    if not os.path.exists(local_cf) and cf_cmd == f'"{local_cf}"':
+                        success = self.download_cloudflared(local_cf)
+                        if not success:
+                            raise Exception("cloudflared download was cancelled or failed.")
                 # Spawn subprocess locally
                 proc = subprocess.Popen(
                     cmd,
@@ -879,6 +1050,8 @@ class TunnelApp:
                     stderr=subprocess.STDOUT,
                     stdin=subprocess.PIPE,
                     text=True,
+                    encoding='utf-8',
+                    errors='replace',
                     bufsize=1,
                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
                 )
@@ -889,6 +1062,25 @@ class TunnelApp:
                     if not self.is_running:
                         break
                     on_output(line)
+                    
+                    # Check for connectivity errors to provide friendly guidance
+                    if "Cloudflare" in provider:
+                        if any(err in line for err in ["Failed to dial a quic connection", "Unable to establish connection", "TLS handshake with edge error", "Failed to connect to outbound"]):
+                            msg = (
+                                "[提示] 检测到 Cloudflare 节点连接失败。这通常是由于本地代理软件（如 Clash/TUN 模式）、安全软件拦截，或网络环境屏蔽了 7844 端口所致。\n"
+                                "【建议解决方法】\n"
+                                "1. 将 *.argotunnel.com 和 *.cloudflare.com 域名加入您的代理软件“直连/绕过”名单（Bypass List）。\n"
+                                "2. 确保系统时钟与北京时间完全同步。\n"
+                                "3. 检查本地是否有防火墙限制了 UDP/TCP 7844 端口的流出连接。\n"
+                                if self.current_lang == "zh" else
+                                "[Tip] Detected failure connecting to Cloudflare edge. This is typically due to local proxy software (e.g. Clash TUN mode), antivirus, or ISP blocking port 7844.\n"
+                                "【Troubleshooting】\n"
+                                "1. Add *.argotunnel.com and *.cloudflare.com to your VPN/Proxy bypass/direct rules.\n"
+                                "2. Ensure your system clock is synchronized.\n"
+                                "3. Verify that outbound connections on TCP/UDP port 7844 are not blocked by a firewall.\n"
+                            )
+                            on_output(msg + "\n")
+                            
                     if not url_found:
                         match = re.search(url_regex, line)
                         if match:
