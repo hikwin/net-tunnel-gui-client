@@ -211,6 +211,9 @@ def download_db(target_path, progress_callback=None, cancel_event=None):
     Includes thread cancellation check and progress callback.
     """
     urls = [
+        "https://gh-proxy.com/https://github.com/metowolf/qqwry.dat/releases/latest/download/qqwry.dat",
+        "https://ghproxy.net/https://github.com/metowolf/qqwry.dat/releases/latest/download/qqwry.dat",
+        "https://mirror.ghproxy.com/https://github.com/metowolf/qqwry.dat/releases/latest/download/qqwry.dat",
         "https://github.com/metowolf/qqwry.dat/releases/latest/download/qqwry.dat",
         "https://cdn.jsdelivr.net/gh/metowolf/qqwry.dat@master/qqwry.dat",
         "https://raw.githubusercontent.com/metowolf/qqwry.dat/master/qqwry.dat"
@@ -222,11 +225,15 @@ def download_db(target_path, progress_callback=None, cancel_event=None):
             return False
             
         try:
+            print(f"Trying to download database from {url}...")
             req = urllib.request.Request(
                 url, 
                 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
             )
-            with urllib.request.urlopen(req, timeout=12) as response:
+            import ssl
+            ssl_context = ssl._create_unverified_context()
+            
+            with urllib.request.urlopen(req, timeout=30, context=ssl_context) as response:
                 total_size = int(response.headers.get('content-length', 0))
                 
                 temp_path = target_path + ".tmp"
@@ -260,6 +267,33 @@ def download_db(target_path, progress_callback=None, cancel_event=None):
             print(f"Failed to download from {url}: {e}")
             last_error = e
             
+    if last_error:
+        print("All direct and mirror download attempts failed. Trying to use system curl as fallback...")
+        for url in urls:
+            if cancel_event and cancel_event.is_set():
+                return False
+            try:
+                print(f"Trying to download database via curl from {url}...")
+                temp_path = target_path + ".tmp"
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+                
+                curl_bin = "curl.exe" if os.name == 'nt' else "curl"
+                cmd = f'{curl_bin} --ssl-no-revoke -L --fail --connect-timeout 20 -o "{temp_path}" "{url}"'
+                
+                import subprocess
+                res = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                if res.returncode == 0 and os.path.exists(temp_path) and os.path.getsize(temp_path) > 5000000:
+                    if os.path.exists(target_path):
+                        os.remove(target_path)
+                    os.rename(temp_path, target_path)
+                    return True
+            except Exception as curl_e:
+                print(f"Failed to download via curl from {url}: {curl_e}")
+                last_error = curl_e
+                continue
+                
     if last_error:
         raise last_error
     return False

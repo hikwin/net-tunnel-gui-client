@@ -299,6 +299,8 @@ class TunnelApp:
                 filename = "cloudflared-linux-amd64" if "64" in machine else "cloudflared-linux-386"
                 
         urls = [
+            f"https://gh-proxy.com/https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}",
+            f"https://ghproxy.net/https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}",
             f"https://mirror.ghproxy.com/https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}",
             f"https://github.com/cloudflare/cloudflared/releases/latest/download/{filename}"
         ]
@@ -308,11 +310,23 @@ class TunnelApp:
         last_err = None
         for url in urls:
             try:
+                from urllib.parse import urlparse
+                parsed_url = urlparse(url)
+                host_display = parsed_url.netloc if parsed_url.netloc else "GitHub"
+                
+                if self.current_lang == "zh":
+                    self.log(f"正在尝试从源下载: {host_display} ...")
+                else:
+                    self.log(f"Trying to download from source: {host_display} ...")
+                
                 req = urllib.request.Request(
                     url,
                     headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
                 )
-                with urllib.request.urlopen(req, timeout=15) as response:
+                import ssl
+                ssl_context = ssl._create_unverified_context()
+                
+                with urllib.request.urlopen(req, timeout=30, context=ssl_context) as response:
                     total_size = int(response.headers.get('content-length', 0))
                     temp_path = target_path + ".tmp"
                     downloaded = 0
@@ -363,6 +377,47 @@ class TunnelApp:
                 # Fallback to next URL
                 continue
                 
+        if last_err:
+            if self.current_lang == "zh":
+                self.log("所有直连及镜像下载尝试失败，正在尝试使用系统 curl 作为备用下载器...")
+            else:
+                self.log("All direct and mirror download attempts failed. Trying to use system curl as fallback...")
+                
+            for url in urls:
+                try:
+                    from urllib.parse import urlparse
+                    parsed_url = urlparse(url)
+                    host_display = parsed_url.netloc if parsed_url.netloc else "GitHub"
+                    
+                    if self.current_lang == "zh":
+                        self.log(f"正在尝试使用 curl 从源下载: {host_display} ...")
+                    else:
+                        self.log(f"Trying to download via curl from source: {host_display} ...")
+                        
+                    temp_path = target_path + ".tmp"
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
+                        
+                    curl_bin = "curl.exe" if os.name == 'nt' else "curl"
+                    cmd = f'{curl_bin} --ssl-no-revoke -L --fail --connect-timeout 20 -o "{temp_path}" "{url}"'
+                    
+                    res = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                         creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                    
+                    if res.returncode == 0 and os.path.exists(temp_path) and os.path.getsize(temp_path) > 1000000:
+                        if os.path.exists(target_path):
+                            os.remove(target_path)
+                        os.rename(temp_path, target_path)
+                        
+                        if system != "windows":
+                            os.chmod(target_path, 0o755)
+                            
+                        self.log(self.get_text("log_cf_download_success"))
+                        return True
+                except Exception as curl_e:
+                    last_err = curl_e
+                    continue
+                    
         if last_err:
             self.log(self.get_text("log_cf_download_failed", e=str(last_err)))
             raise last_err
