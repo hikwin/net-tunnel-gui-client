@@ -1013,11 +1013,11 @@ class TunnelApp:
             url_regex = r"your url is:\s+(https?://[^\s]+)"
             
         elif "serveo.net" in provider:
-            cmd = f"ssh -o StrictHostKeyChecking=no -R 80:127.0.0.1:{port} serveo.net"
+            cmd = f"ssh -T -o StrictHostKeyChecking=no -R 80:127.0.0.1:{port} serveo.net"
             url_regex = r"from\s+(https?://[^\s]+)"
             
         elif "Pinggy.io" in provider:
-            cmd = f"ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:{port} free.pinggy.io"
+            cmd = f"ssh -T -p 443 -o StrictHostKeyChecking=no -R0:localhost:{port} free.pinggy.io"
             url_regex = r"(https://[a-zA-Z0-9\-\.]+\.pinggy(?:-free)?\.(?:link|net))"
             
         elif "Cloudflare" in provider:
