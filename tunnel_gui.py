@@ -54,8 +54,8 @@ class TunnelApp:
         # Localization data
         self.lang_data = {
             "zh": {
-                "window_title": "内网穿透 GUI 客户端",
-                "title_label": "内网穿透 GUI 客户端",
+                "window_title": "内网穿透 GUI 客户端 v1.0",
+                "title_label": "内网穿透 GUI 客户端 v1.0",
                 "author": " 作者：",
                 "help_btn": "❓ 帮助说明",
                 "pub_ipv4": "本机公网 IPv4:",
@@ -142,11 +142,37 @@ class TunnelApp:
                 "tip_lt": "• Localtunnel 是一个基于 Node.js 的免费反向代理穿透客户端。\n• 子域名为选填项，如果不填，系统会默认生成一个随机域名。\n• Host 参数通常使用官网默认的 'https://localtunnel.me'。\n• 优点：不需要任何账户即可启动，速度和稳定性极佳。",
                 "tip_serveo": "• serveo.net 是一项极简的 SSH 远程端口映射服务。\n• 优点：使用纯 SSH 转发，不需要本地安装任何辅助二进制文件，直接复用操作系统的 OpenSSH 客户端。\n• 它的公共链接以 `.serveo.net` 或 `.serveousercontent.com` 结尾，对 HTTP/HTTPS 的代理非常适合测试 API 与前端网页。",
                 "tip_pinggy": "• Pinggy.io 是一项高性能且防火墙友好的 SSH 穿透服务。\n• 优点：同样使用纯 SSH 转发，直连远程服务器的 443 端口，对大多数严格的企业内网也有极强的穿透力。\n• 它的免费公网链接以 `.pinggy.link` 结尾，不需要任何客户端安装，适合开发测试与 webhook 回调。",
-                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) 是一种极简的内网穿透服务。\n• 优点：完全免费，无需注册/登录 Cloudflare 账号，自动生成随机的三级域名 `*.trycloudflare.com`。\n• 首次运行如果本地未检测到 `cloudflared`，系统将自动从 GitHub/镜像源下载该客户端二进制文件。"
+                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) 是一种极简的内网穿透服务。\n• 优点：完全免费，无需注册/登录 Cloudflare 账号，自动生成随机的三级域名 `*.trycloudflare.com`。\n• 首次运行如果本地未检测到 `cloudflared`，系统将自动从 GitHub/镜像源下载该客户端二进制文件。",
+                "ssh_missing_title": "SSH 客户端缺失",
+                "ssh_missing_header": "⚠️ 未检测到系统 SSH 运行环境",
+                "ssh_missing_text": (
+                    "由于当前系统未检测到 OpenSSH 客户端，导致 SSH 相关的穿透服务（Serveo、Pinggy.io）无法使用。\n\n"
+                    "请选择以下方式之一进行安装或配置：\n\n"
+                    "【方式一：Windows 可选功能安装】\n"
+                    "• 快捷入口：点击下方“打开可选功能设置”按钮直接前往。\n"
+                    "• 手动路径：\n"
+                    "  - Windows 11：打开 Windows 设置 → 系统 → 可选功能\n"
+                    "  - Windows 10：打开 Windows 设置 → 应用 → 可选功能\n"
+                    "• 搜索并勾选 “OpenSSH 客户端”，点击安装并重启本程序。\n\n"
+                    "【方式二：安装 Git for Windows】\n"
+                    "1. 下载并安装 Git for Windows (https://git-scm.com/download/win)。\n"
+                    "2. 安装时保持默认选项（安装包会自动包含 OpenSSH 并配置好）。\n"
+                    "3. 安装完成后重启本程序。\n\n"
+                    "【方式三：程序自动安装 OpenSSH】\n"
+                    "点击下方的“程序自动安装”按钮，程序将自动下载便携式 OpenSSH 客户端并配置，无需管理员权限。"
+                ),
+                "btn_open_settings": "打开可选功能设置",
+                "btn_auto_install_ssh": "方式三：程序自动安装 OpenSSH (推荐)",
+                "ssh_downloading": "正在从 GitHub/镜像源下载 OpenSSH 客户端...",
+                "ssh_download_success": "OpenSSH 客户端下载并配置成功！",
+                "ssh_download_failed": "OpenSSH 客户端下载失败: {e}",
+                "ssh_extracting": "下载完成，正在解压缩并配置本地环境...",
+                "ssh_extract_success": "解压缩成功！本地 OpenSSH 已就绪。",
+                "ssh_extract_failed": "解压缩失败: {e}"
             },
             "en": {
-                "window_title": "Intranet Penetration GUI Client",
-                "title_label": "Intranet Penetration GUI Client",
+                "window_title": "Intranet Penetration GUI Client v1.0",
+                "title_label": "Intranet Penetration GUI Client v1.0",
                 "author": " Author: ",
                 "help_btn": "❓ Help & Info",
                 "pub_ipv4": "Local Public IPv4:",
@@ -233,7 +259,33 @@ class TunnelApp:
                 "tip_lt": "• Localtunnel is a free, Node.js-based reverse proxy client.\n• Subdomain is optional. If left blank, a random domain will be generated.\n• Host defaults to 'https://localtunnel.me'.\n• Advantage: No account needed, speed and stability are excellent.",
                 "tip_serveo": "• serveo.net is an ultra-simple SSH port forwarding service.\n• Advantage: Uses pure SSH. No local agent binary is needed as it uses openSSH.\n• Public URLs end with `.serveo.net` or `.serveousercontent.com`, perfect for APIs and web page testing.",
                 "tip_pinggy": "• Pinggy.io is a high-performance, firewall-friendly SSH tunnel service.\n• Advantage: Uses pure SSH to port 443, making it highly effective even behind strict corporate firewalls.\n• Free URLs end with `.pinggy.link`. No installation is required, ideal for webhooks.",
-                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) is an ultra-simple tunnel service.\n• Advantage: Completely free, no registration or Cloudflare account required. Generates a random `*.trycloudflare.com` URL.\n• If `cloudflared` is not found locally on first launch, the system will automatically download it from GitHub/mirrors."
+                "tip_cf": "• Cloudflare Tunnel Quick Share (TryCloudflare) is an ultra-simple tunnel service.\n• Advantage: Completely free, no registration or Cloudflare account required. Generates a random `*.trycloudflare.com` URL.\n• If `cloudflared` is not found locally on first launch, the system will automatically download it from GitHub/mirrors.",
+                "ssh_missing_title": "SSH Client Missing",
+                "ssh_missing_header": "⚠️ OpenSSH Client Not Found",
+                "ssh_missing_text": (
+                    "SSH-related tunnel services (Serveo, Pinggy.io) require the OpenSSH client, which was not found on your system.\n\n"
+                    "Please install OpenSSH using one of the following methods:\n\n"
+                    "【Option 1: Windows Optional Features】\n"
+                    "• Shortcut: Click the 'Open Optional Features' button below.\n"
+                    "• Manual Path:\n"
+                    "  - Windows 11: Windows Settings → System → Optional Features\n"
+                    "  - Windows 10: Windows Settings → Apps → Optional Features\n"
+                    "• Search and check 'OpenSSH Client', install it, and restart this program.\n\n"
+                    "【Option 2: Install Git for Windows】\n"
+                    "1. Download and install Git for Windows (https://git-scm.com/download/win).\n"
+                    "2. Keep the default options during setup (OpenSSH is included).\n"
+                    "3. Restart this program after installation completes.\n\n"
+                    "【Option 3: Auto-Install OpenSSH】\n"
+                    "Click the 'Auto-Install OpenSSH' button below to automatically download, unzip, and configure a portable OpenSSH client locally."
+                ),
+                "btn_open_settings": "Open Optional Features",
+                "btn_auto_install_ssh": "Option 3: Auto-Install OpenSSH (Easiest)",
+                "ssh_downloading": "Downloading OpenSSH from GitHub/Mirror...",
+                "ssh_download_success": "OpenSSH downloaded and configured successfully!",
+                "ssh_download_failed": "Failed to download OpenSSH: {e}",
+                "ssh_extracting": "Download complete. Extracting local environment...",
+                "ssh_extract_success": "Extraction successful! Local OpenSSH is ready.",
+                "ssh_extract_failed": "Extraction failed: {e}"
             }
         }
         
@@ -248,6 +300,9 @@ class TunnelApp:
         
         # Update text for all elements based on current language
         self.update_ui_text()
+        
+        # Prepend local OpenSSH to PATH if it exists
+        self.update_path_with_local_ssh()
         
         # Check dependencies in background
         self.check_dependencies_async()
@@ -278,6 +333,54 @@ class TunnelApp:
             exe_dir = os.path.dirname(os.path.abspath(__file__))
         binary_name = "cloudflared.exe" if os.name == 'nt' else "cloudflared"
         return os.path.join(exe_dir, binary_name)
+
+    def get_openssh_dir(self):
+        """Locate local OpenSSH directory next to executable or source file."""
+        if getattr(sys, 'frozen', False):
+            exe_dir = os.path.dirname(sys.executable)
+        else:
+            exe_dir = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(exe_dir, "openssh")
+
+    def get_local_ssh_paths(self):
+        """Find local ssh.exe and ssh-keygen.exe paths if they exist."""
+        openssh_dir = self.get_openssh_dir()
+        if not os.path.exists(openssh_dir):
+            return None, None
+        
+        ssh_path = None
+        keygen_path = None
+        for root, dirs, files in os.walk(openssh_dir):
+            for file in files:
+                if file.lower() == "ssh.exe":
+                    ssh_path = os.path.join(root, file)
+                elif file.lower() == "ssh-keygen.exe":
+                    keygen_path = os.path.join(root, file)
+        
+        if ssh_path and keygen_path:
+            return ssh_path, keygen_path
+        return None, None
+
+    def update_path_with_local_ssh(self):
+        """Prepend local OpenSSH directory to PATH to make subprocess resolve local ssh tools."""
+        local_ssh, _ = self.get_local_ssh_paths()
+        if local_ssh:
+            local_ssh_dir = os.path.dirname(local_ssh)
+            if local_ssh_dir not in os.environ["PATH"]:
+                os.environ["PATH"] = local_ssh_dir + os.pathsep + os.environ["PATH"]
+
+    def is_ssh_available(self):
+        """Check if SSH executable is available (either local or system)."""
+        local_ssh, _ = self.get_local_ssh_paths()
+        if local_ssh:
+            return True
+        try:
+            res = subprocess.run("ssh -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+            return res.returncode == 0
+        except Exception:
+            return False
+
 
     def download_cloudflared(self, target_path):
         """Asynchronously download the cloudflared binary matching current platform and architecture."""
@@ -607,12 +710,7 @@ class TunnelApp:
                 npx_ok = False
                 
             # Check SSH
-            try:
-                res = subprocess.run("ssh -V", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
-                                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-                ssh_ok = res.returncode == 0
-            except Exception:
-                ssh_ok = False
+            ssh_ok = self.is_ssh_available()
 
             # Check Cloudflared
             local_cf = self.get_cloudflared_path()
@@ -959,10 +1057,15 @@ class TunnelApp:
         if not has_key:
             self.log(self.get_text("log_ssh_key_gen"))
             key_path = os.path.join(ssh_dir, "id_ed25519")
+            
+            # Find ssh-keygen path
+            _, local_keygen = self.get_local_ssh_paths()
+            keygen_bin = local_keygen if local_keygen else "ssh-keygen"
+            
             try:
                 # Use subprocess to run ssh-keygen without window to prevent flash
                 res = subprocess.run(
-                    ["ssh-keygen", "-t", "ed25519", "-f", key_path, "-N", ""],
+                    [keygen_bin, "-t", "ed25519", "-f", key_path, "-N", ""],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True,
@@ -975,7 +1078,7 @@ class TunnelApp:
                     self.log(self.get_text("log_ssh_key_ed25519_err", stderr=res.stderr.strip()))
                     key_path_rsa = os.path.join(ssh_dir, "id_rsa")
                     res_rsa = subprocess.run(
-                        ["ssh-keygen", "-t", "rsa", "-b", "2048", "-f", key_path_rsa, "-N", ""],
+                        [keygen_bin, "-t", "rsa", "-b", "2048", "-f", key_path_rsa, "-N", ""],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         text=True,
@@ -998,8 +1101,16 @@ class TunnelApp:
             return
             
         provider = self.provider_var.get()
+        if "SSH" in provider:
+            if not self.is_ssh_available():
+                self.show_ssh_missing_dialog()
+                return
+
         cmd = ""
         url_regex = ""
+        
+        local_ssh, _ = self.get_local_ssh_paths()
+        ssh_bin = f'"{local_ssh}"' if local_ssh else "ssh"
 
         cf_cmd = ""
         if "Localtunnel" in provider:
@@ -1013,11 +1124,11 @@ class TunnelApp:
             url_regex = r"your url is:\s+(https?://[^\s]+)"
             
         elif "serveo.net" in provider:
-            cmd = f"ssh -T -o StrictHostKeyChecking=no -R 80:127.0.0.1:{port} serveo.net"
+            cmd = f"{ssh_bin} -T -o StrictHostKeyChecking=no -R 80:127.0.0.1:{port} serveo.net"
             url_regex = r"from\s+(https?://[^\s]+)"
             
         elif "Pinggy.io" in provider:
-            cmd = f"ssh -T -p 443 -o StrictHostKeyChecking=no -R0:localhost:{port} free.pinggy.io"
+            cmd = f"{ssh_bin} -T -p 443 -o StrictHostKeyChecking=no -R0:localhost:{port} free.pinggy.io"
             url_regex = r"(https://[a-zA-Z0-9\-\.]+\.pinggy(?:-free)?\.(?:link|net))"
             
         elif "Cloudflare" in provider:
@@ -1441,6 +1552,247 @@ class TunnelApp:
                               font=("Segoe UI", 9, "bold"), cursor="hand2",
                               command=dialog.destroy)
         btn_close.pack(anchor=tk.CENTER)
+
+    def show_ssh_missing_dialog(self):
+        """Show a customized modal dialog when SSH client is missing."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title(self.get_text("ssh_missing_title"))
+        dialog.geometry("600x500")
+        dialog.resizable(False, False)
+        dialog.configure(bg=self.colors["bg"])
+        
+        # Center the dialog relative to root
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        root_x = self.root.winfo_x()
+        root_y = self.root.winfo_y()
+        root_w = self.root.winfo_width()
+        root_h = self.root.winfo_height()
+        x = root_x + (root_w - 600) // 2
+        y = root_y + (root_h - 500) // 2
+        dialog.geometry(f"+{x}+{y}")
+
+        main_frame = tk.Frame(dialog, bg=self.colors["bg"], padx=20, pady=20)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Header
+        lbl_title = tk.Label(main_frame, text=self.get_text("ssh_missing_header"), font=("Segoe UI", 12, "bold"),
+                             bg=self.colors["bg"], fg=self.colors["danger"])
+        lbl_title.pack(side=tk.TOP, anchor=tk.W, pady=(0, 10))
+        
+        # Button Frame at the bottom
+        btn_frame = tk.Frame(main_frame, bg=self.colors["bg"])
+        btn_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=(5, 0))
+        
+        # Status Label for downloading
+        lbl_status = tk.Label(main_frame, text="", font=("Segoe UI", 9),
+                              bg=self.colors["bg"], fg=self.colors["accent"])
+        lbl_status.pack(side=tk.BOTTOM, anchor=tk.W, pady=(0, 10))
+
+        # Text instructions box
+        content_box = tk.Text(main_frame, bg=self.colors["input_bg"], fg=self.colors["text"],
+                              bd=0, highlightthickness=1, highlightbackground=self.colors["border"],
+                              font=("Segoe UI", 9), wrap=tk.WORD, padx=12, pady=12)
+        content_box.pack(side=tk.TOP, fill=tk.BOTH, expand=True, pady=(0, 15))
+        
+        content_box.insert(tk.END, self.get_text("ssh_missing_text"))
+        content_box.config(state="disabled")
+        
+        # Variable to track if installation is in progress
+        install_in_progress = {"val": False}
+        
+        def start_auto_install():
+            if install_in_progress["val"]:
+                return
+            install_in_progress["val"] = True
+            btn_install.config(state="disabled")
+            
+            # Get openssh download dir and zip path
+            openssh_dir = self.get_openssh_dir()
+            zip_path = os.path.join(openssh_dir, "openssh.zip")
+            
+            def progress_cb(status_text):
+                if dialog.winfo_exists():
+                    self.root.after(0, lambda: lbl_status.config(text=status_text))
+            
+            def success_cb():
+                import zipfile
+                progress_cb(self.get_text("ssh_extracting"))
+                try:
+                    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                        zip_ref.extractall(openssh_dir)
+                    
+                    try:
+                        os.remove(zip_path)
+                    except Exception:
+                        pass
+                    
+                    # Verify
+                    local_ssh, local_keygen = self.get_local_ssh_paths()
+                    if local_ssh and local_keygen:
+                        self.update_path_with_local_ssh()
+                        # Refresh environment check on main window
+                        self.root.after(0, self.check_dependencies_async)
+                        
+                        def show_success():
+                            messagebox.showinfo(
+                                self.get_text("success_title"),
+                                "OpenSSH 自动下载配置成功！" if self.current_lang == 'zh' else "OpenSSH downloaded and configured successfully!"
+                            )
+                            dialog.destroy()
+                        self.root.after(0, show_success)
+                    else:
+                        raise Exception("ssh.exe or ssh-keygen.exe not found in extracted files.")
+                except Exception as e:
+                    error_cb(e)
+            
+            def error_cb(err):
+                def show_fail():
+                    messagebox.showerror(
+                        "Error" if self.current_lang == 'en' else "错误",
+                        f"OpenSSH 自动安装失败: {err}" if self.current_lang == 'zh' else f"OpenSSH installation failed: {err}"
+                    )
+                    btn_install.config(state="normal")
+                    lbl_status.config(text="")
+                    install_in_progress["val"] = False
+                self.root.after(0, show_fail)
+            
+            # Start background worker thread
+            def worker():
+                import platform
+                import urllib.request
+                import ssl
+                
+                system = platform.system().lower()
+                machine = platform.machine().lower()
+                
+                is_64bit = "64" in machine or "arm" in machine or "aarch" in machine
+                filename = "OpenSSH-Win64.zip" if is_64bit else "OpenSSH-Win32.zip"
+                
+                urls = [
+                    f"https://gh-proxy.com/https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.5.0.0p1-Beta/{filename}",
+                    f"https://ghproxy.net/https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.5.0.0p1-Beta/{filename}",
+                    f"https://mirror.ghproxy.com/https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.5.0.0p1-Beta/{filename}",
+                    f"https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.5.0.0p1-Beta/{filename}"
+                ]
+                
+                progress_cb(self.get_text("ssh_downloading"))
+                
+                last_err = None
+                for url in urls:
+                    try:
+                        from urllib.parse import urlparse
+                        parsed_url = urlparse(url)
+                        host_display = parsed_url.netloc if parsed_url.netloc else "GitHub"
+                        
+                        if self.current_lang == "zh":
+                            progress_cb(f"正在尝试从源下载: {host_display}...")
+                        else:
+                            progress_cb(f"Trying to download from: {host_display}...")
+                        
+                        req = urllib.request.Request(
+                            url,
+                            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+                        )
+                        ssl_context = ssl._create_unverified_context()
+                        
+                        with urllib.request.urlopen(req, timeout=30, context=ssl_context) as response:
+                            total_size = int(response.headers.get('content-length', 0))
+                            os.makedirs(os.path.dirname(zip_path), exist_ok=True)
+                            
+                            downloaded = 0
+                            block_size = 1024 * 64
+                            last_percent = -1
+                            with open(zip_path, 'wb') as f:
+                                while True:
+                                    if not dialog.winfo_exists(): # Dialog closed
+                                        f.close()
+                                        if os.path.exists(zip_path):
+                                            os.remove(zip_path)
+                                        return
+                                    chunk = response.read(block_size)
+                                    if not chunk:
+                                        break
+                                    f.write(chunk)
+                                    downloaded += len(chunk)
+                                    if total_size > 0:
+                                        percent = (downloaded / total_size) * 100
+                                        if int(percent) > last_percent:
+                                            last_percent = int(percent)
+                                            progress_cb(
+                                                f"正在下载: {percent:.1f}% ({downloaded/(1024*1024):.2f}MB / {total_size/(1024*1024):.2f}MB)..."
+                                                if self.current_lang == 'zh' else
+                                                f"Downloading: {percent:.1f}% ({downloaded/(1024*1024):.2f}MB / {total_size/(1024*1024):.2f}MB)..."
+                                            )
+                            success_cb()
+                            return
+                    except Exception as e:
+                        last_err = e
+                        continue
+                
+                # Fallback to system curl
+                if self.current_lang == "zh":
+                    progress_cb("正在尝试使用 system curl 备用下载...")
+                else:
+                    progress_cb("Trying to download via system curl...")
+                    
+                for url in urls:
+                    try:
+                        temp_path = zip_path + ".tmp"
+                        if os.path.exists(temp_path):
+                            os.remove(temp_path)
+                        
+                        curl_bin = "curl.exe" if os.name == 'nt' else "curl"
+                        cmd = f'{curl_bin} --ssl-no-revoke -L --fail --connect-timeout 20 -o "{temp_path}" "{url}"'
+                        res = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                             creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                        if res.returncode == 0 and os.path.exists(temp_path) and os.path.getsize(temp_path) > 100000:
+                            if os.path.exists(zip_path):
+                                os.remove(zip_path)
+                            os.rename(temp_path, zip_path)
+                            success_cb()
+                            return
+                    except Exception as e:
+                        last_err = e
+                        continue
+                        
+                error_cb(last_err if last_err else "Download failed.")
+            
+            threading.Thread(target=worker, daemon=True).start()
+
+        # Option 1 Shortcut Button
+        def open_system_settings():
+            webbrowser.open("ms-settings:optionalfeatures")
+            
+        btn_settings = tk.Button(btn_frame, text=self.get_text("btn_open_settings"), 
+                                 bg=self.colors["border"], fg=self.colors["text"],
+                                 activebackground=self.colors["accent"], activeforeground="#11111b",
+                                 bd=0, relief="flat", padx=15, pady=8, 
+                                 font=("Segoe UI", 9, "bold"), cursor="hand2",
+                                 command=open_system_settings)
+        btn_settings.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
+
+        # Option 3 Auto Install Button
+        btn_install = tk.Button(btn_frame, text=self.get_text("btn_auto_install_ssh"), 
+                                bg=self.colors["btn_start"], fg="#11111b",
+                                activebackground=self.colors["btn_start_hover"], activeforeground="#11111b",
+                                bd=0, relief="flat", padx=15, pady=8, 
+                                font=("Segoe UI", 9, "bold"), cursor="hand2",
+                                command=start_auto_install)
+        btn_install.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
+        
+        # Close Button
+        btn_close = tk.Button(btn_frame, text=self.get_text("help_close"), 
+                              bg=self.colors["border"], fg=self.colors["text"],
+                              activebackground=self.colors["accent"], activeforeground="#11111b",
+                              bd=0, relief="flat", padx=15, pady=8, 
+                              font=("Segoe UI", 9, "bold"), cursor="hand2",
+                              command=lambda: dialog.destroy() if not install_in_progress["val"] else messagebox.showwarning(
+                                  "Warning" if self.current_lang == 'en' else "警告",
+                                  "Download is in progress. Please wait..." if self.current_lang == 'en' else "正在下载中，请稍候..."
+                              ))
+        btn_close.pack(side=tk.RIGHT, padx=(10, 0))
 
     def poll_port_status(self):
         """Periodically check the status of the local target port while the tunnel is running."""
